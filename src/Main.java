@@ -6,7 +6,7 @@ public class Main {
         if (dbConnection.getConnection() != null) {
             System.out.println("Connection established successfully.");
         } else {
-            System.out.println("Failed to establish connection.");
+            System.out.println("Failed to establish test.");
         }
     }
 }
