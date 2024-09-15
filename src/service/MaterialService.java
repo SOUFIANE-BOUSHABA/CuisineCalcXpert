@@ -48,4 +48,16 @@ public class MaterialService {
     public List<Material> getMaterialsByProjectId(int projectId) {
         return materiauxRepository.findByProjectId(projectId);
     }
+
+
+    public double calculateMaterialCost(int materialId) {
+        Optional<Material> material = materiauxRepository.findById(materialId);
+        if (material.isPresent()) {
+            Material mat = material.get();
+            return mat.getCoutUnitaire() * mat.getQuantite();
+        } else {
+            System.out.println("Material not found with ID: " + materialId);
+            return 0;
+        }
+    }
 }
