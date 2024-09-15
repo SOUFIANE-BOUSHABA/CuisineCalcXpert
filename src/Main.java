@@ -21,6 +21,9 @@ public class Main {
             int choice = scanner.nextInt();
             scanner.nextLine();
 
+
+
+
             switch (choice) {
                 case 1:
                     projectController.createProject();
@@ -31,7 +34,7 @@ public class Main {
                     break;
 
                 case 3:
-                    // Implement the cost calculation logic here
+
                     break;
 
                 case 4:

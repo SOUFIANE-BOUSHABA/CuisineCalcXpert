@@ -93,9 +93,13 @@ public class ClientController {
         int id = scanner.nextInt();
         scanner.nextLine();
 
+
+
         clientService.delete(id);
-        System.out.println("Client supprimé avec succès.");
+        System.out.println("Client supprimé   avec   succès.");
     }
+
+
 
 
     public void displayAllClients() {
