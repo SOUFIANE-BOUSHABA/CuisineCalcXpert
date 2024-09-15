@@ -5,7 +5,7 @@ public abstract class Component {
     private String nom;
     private double coutUnitaire;
     private double quantite;
-    private String typeComposant; // Should be "Matériel" or "Main-d'œuvre"
+    private String typeComposant;
     private double tauxTVA;
 
     public Component() {}
