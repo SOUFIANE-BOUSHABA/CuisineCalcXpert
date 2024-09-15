@@ -11,6 +11,7 @@ import repository.impl.ProjectRepositoryImpl;
 import repository.impl.WorkforceRepositoryImpl;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ProjectService {
 
@@ -37,8 +38,8 @@ public class ProjectService {
         projectRepository.delete(id);
     }
 
-    public void findById(int id){
-        projectRepository.findById(id);
+    public Optional<Project> findById(int id){
+        return projectRepository.findById(id);
     }
 
     public List<Project> findAll(){
