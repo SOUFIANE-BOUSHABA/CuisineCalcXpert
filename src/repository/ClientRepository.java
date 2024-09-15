@@ -10,4 +10,6 @@ public interface ClientRepository {
     List<Client> findAll();
     void update(Client client);
     void delete(int id);
+    Optional<Client> findByNom(String nom);
+
 }
