@@ -4,6 +4,8 @@ import model.Project;
 import repository.ProjectRepository;
 import repository.impl.ProjectRepositoryImpl;
 
+import java.util.List;
+
 public class ProjectService {
 
     private ProjectRepository projectRepository;
@@ -28,8 +30,8 @@ public class ProjectService {
         projectRepository.findById(id);
     }
 
-    public void findAll(){
-        projectRepository.findAll();
+    public List<Project> findAll(){
+        return  projectRepository.findAll();
     }
 
 

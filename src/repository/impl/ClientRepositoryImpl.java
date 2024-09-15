@@ -106,6 +106,31 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
 
+    public Optional<Client> findByNom(String nom) {
+        try {
+            String query = "SELECT * FROM client WHERE nom = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, nom);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return Optional.of(new Client(
+                        rs.getInt("id"),
+                        rs.getString("nom"),
+                        rs.getString("adresse"),
+                        rs.getString("telephone"),
+                        rs.getBoolean("estprofessionnel"),
+                        rs.getDouble("remise")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return Optional.empty();
+
+    }
+
+
 
 
 }

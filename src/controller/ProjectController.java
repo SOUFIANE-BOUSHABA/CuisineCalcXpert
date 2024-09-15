@@ -36,7 +36,7 @@ public class ProjectController {
                 System.out.print("Entrez le nom du client : ");
                 String clientName = scanner.nextLine();
 
-                Optional<Client> clientOpt = clientService.findByName(clientName);
+                Optional<Client> clientOpt = clientService.findByNom(clientName);
                 if (clientOpt.isPresent()) {
                     client = clientOpt.get();
                     System.out.println("Client trouvé !");

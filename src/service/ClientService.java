@@ -37,5 +37,9 @@ public class ClientService {
         clientRepository.delete(id);
     }
 
+    public Optional<Client> findByNom(String nom){
+        return clientRepository.findByNom(nom);
+    }
+
 
 }
