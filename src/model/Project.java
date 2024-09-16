@@ -13,6 +13,7 @@ public class Project {
     }
 
     public Project() {}
+    public Project(int id ) { this.id = id;}
 
     public Project(int id, String nomProjet, double margeBeneficiaire, double coutTotal, EtatProjet etatProjet, int clientId) {
         this.id = id;

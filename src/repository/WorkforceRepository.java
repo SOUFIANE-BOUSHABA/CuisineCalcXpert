@@ -17,4 +17,6 @@ public interface WorkforceRepository {
     void deleteById(int id);
 
     List<Workforce> findByProjectId(int projectId);
+
+    void updateTva(Workforce workforce);
 }

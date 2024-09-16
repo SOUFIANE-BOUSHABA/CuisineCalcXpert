@@ -18,4 +18,6 @@ public interface MateriauxRepository {
 
 
     List<Material> findByProjectId(int projectId);
+
+    void updateTva(Material materiaux);
 }

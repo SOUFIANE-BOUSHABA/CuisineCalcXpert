@@ -49,6 +49,10 @@ public class WorkforceService {
         return workforceRepository.findByProjectId(projectId);
     }
 
+    public void updateTva(Workforce workforce) {
+        workforceRepository.updateTva(workforce);
+    }
+
 
     public double calculateWorkforceCost(int workforceId) {
         Optional<Workforce> workforce = workforceRepository.findById(workforceId);

@@ -6,6 +6,7 @@ import utils.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,13 +26,23 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     public void create(Project project) {
         String sql = "INSERT INTO project (nom_projet, marge_beneficiaire, cout_total, etat_projet, client_id) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, project.getNomProjet());
             stmt.setDouble(2, project.getMargeBeneficiaire());
             stmt.setDouble(3, project.getCoutTotal());
             stmt.setString(4, project.getEtatProjet());
             stmt.setInt(5, project.getClientId());
+
             stmt.executeUpdate();
+
+            // Retrieve the generated keys
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    project.setId(generatedKeys.getInt(1));
+                } else {
+                    throw new SQLException("Creating project failed, no ID obtained.");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
