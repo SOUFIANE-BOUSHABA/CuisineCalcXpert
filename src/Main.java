@@ -1,28 +1,35 @@
-import controller.ProjectController;
-import service.ClientService;
-import service.ProjectService;
-
 import java.util.Scanner;
+import service.ClientService;
+import service.MaterialService;
+import service.ProjectService;
+import controller.ClientController;
+import controller.ProjectController;
+import service.WorkforceService;
 
 public class Main {
     public static void main(String[] args) {
-        ClientService clientService = new ClientService();
-        ProjectService projectService = new ProjectService();
-        ProjectController projectController = new ProjectController(clientService, projectService);
         Scanner scanner = new Scanner(System.in);
 
+
+        ClientService clientService = new ClientService();
+        ProjectService projectService = new ProjectService();
+        MaterialService materialService = new MaterialService();
+        WorkforceService workforceService = new WorkforceService();
+
+
+        ClientController clientController = new ClientController(clientService);
+        ProjectController projectController = new ProjectController(clientService, projectService , workforceService, materialService);
+
         while (true) {
-            System.out.println("\n=== Menu Principal ===");
+            System.out.println("=== Bienvenue dans l'application de gestion des projets de rénovation de cuisines ===");
+            System.out.println("=== Menu Principal ===");
             System.out.println("1. Créer un nouveau projet");
             System.out.println("2. Afficher les projets existants");
-            System.out.println("3. Calculer le coût d'un projet");
-            System.out.println("4. Quitter");
+            System.out.println("3. Quitter");
             System.out.print("Choisissez une option : ");
+
             int choice = scanner.nextInt();
             scanner.nextLine();
-
-
-
 
             switch (choice) {
                 case 1:
@@ -34,16 +41,14 @@ public class Main {
                     break;
 
                 case 3:
-
-                    break;
-
-                case 4:
-                    System.out.println("Merci d'avoir utilisé le gestionnaire de projets.");
+                    System.out.println("Merci d'avoir utilisé l'application. À bientôt !");
+                    scanner.close();
                     System.exit(0);
                     break;
 
                 default:
                     System.out.println("Option invalide. Veuillez réessayer.");
+                    break;
             }
         }
     }

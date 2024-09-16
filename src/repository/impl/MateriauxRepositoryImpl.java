@@ -1,6 +1,7 @@
 package repository.impl;
 
 import model.Material;
+import model.Project;
 import repository.MateriauxRepository;
 import utils.DatabaseConnection;
 
@@ -36,7 +37,11 @@ public class MateriauxRepositoryImpl implements MateriauxRepository {
                         rs.getDouble("quantite"),
                         rs.getDouble("taux_tva"),
                         rs.getDouble("cout_transport"),
-                        rs.getDouble("coefficient_qualite")
+                        rs.getDouble("coefficient_qualite"),
+                        new Project(
+                        rs.getInt("projet_id"))
+
+
                 );
                 return Optional.of(material);
             }
@@ -50,7 +55,7 @@ public class MateriauxRepositoryImpl implements MateriauxRepository {
 
     @Override
     public void save(Material material) {
-        String sql = "INSERT INTO materiaux (nom, cout_unitaire, quantite, taux_tva, cout_transport, coefficient_qualite) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO materiaux (nom, cout_unitaire, quantite, taux_tva, cout_transport, coefficient_qualite , projet_id , type_composant ) VALUES (?, ?, ?, ?, ?, ? , ? , ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, material.getNom());
             stmt.setDouble(2, material.getCoutUnitaire());
@@ -58,6 +63,9 @@ public class MateriauxRepositoryImpl implements MateriauxRepository {
             stmt.setDouble(4, material.getTauxTVA());
             stmt.setDouble(5, material.getCoutTransport());
             stmt.setDouble(6, material.getCoefficientQualite());
+            stmt.setInt(7 , material.getProject().getId());
+            stmt.setString(8, material.getTypeComposant());
+
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -108,7 +116,9 @@ public class MateriauxRepositoryImpl implements MateriauxRepository {
                         rs.getDouble("quantite"),
                         rs.getDouble("taux_tva"),
                         rs.getDouble("cout_transport"),
-                        rs.getDouble("coefficient_qualite")
+                        rs.getDouble("coefficient_qualite"),
+                        new Project(
+                                rs.getInt("projet_id"))
                 );
                 materials.add(material);
             }
@@ -135,7 +145,9 @@ public class MateriauxRepositoryImpl implements MateriauxRepository {
                         rs.getDouble("quantite"),
                         rs.getDouble("taux_tva"),
                         rs.getDouble("cout_transport"),
-                        rs.getDouble("coefficient_qualite")
+                        rs.getDouble("coefficient_qualite"),
+                        new Project(
+                                rs.getInt("projet_id"))
                 );
                 materials.add(material);
             }
@@ -143,6 +155,18 @@ public class MateriauxRepositoryImpl implements MateriauxRepository {
             e.printStackTrace();
         }
         return materials;
+    }
+
+    @Override
+    public void updateTva(Material material) {
+        String sql = "UPDATE materiaux SET taux_tva = ? WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setDouble(1, material.getTauxTVA());
+            stmt.setInt(2, material.getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 

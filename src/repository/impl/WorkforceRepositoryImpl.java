@@ -1,5 +1,6 @@
 package repository.impl;
 
+import model.Project;
 import model.Workforce;
 import repository.WorkforceRepository;
 import utils.DatabaseConnection;
@@ -36,7 +37,9 @@ public class WorkforceRepositoryImpl implements WorkforceRepository {
                         rs.getDouble("taux_tva"),
                         rs.getDouble("taux_horaire"),
                         rs.getDouble("heures_travail"),
-                        rs.getDouble("productivite_ouvrier")
+                        rs.getDouble("productivite_ouvrier"),
+                        new Project(
+                                rs.getInt("projet_id"))
                 );
                 return Optional.of(workforce);
             }
@@ -61,7 +64,9 @@ public class WorkforceRepositoryImpl implements WorkforceRepository {
                         rs.getDouble("taux_tva"),
                         rs.getDouble("taux_horaire"),
                         rs.getDouble("heures_travail"),
-                        rs.getDouble("productivite_ouvrier")
+                        rs.getDouble("productivite_ouvrier"),
+                        new Project(
+                                rs.getInt("projet_id"))
                 );
                 workforces.add(workforce);
             }
@@ -73,7 +78,7 @@ public class WorkforceRepositoryImpl implements WorkforceRepository {
 
     @Override
     public void save(Workforce workforce) {
-        String sql = "INSERT INTO workforce (nom, cout_unitaire, quantite, taux_tva, taux_horaire, heures_travail, productivite_ouvrier) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO workforce (nom, cout_unitaire, quantite, taux_tva, taux_horaire, heures_travail, productivite_ouvrier , projet_id  , type_composant) VALUES (?, ?, ?, ?, ?, ?, ?,? , ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, workforce.getNom());
             stmt.setDouble(2, workforce.getCoutUnitaire());
@@ -82,6 +87,9 @@ public class WorkforceRepositoryImpl implements WorkforceRepository {
             stmt.setDouble(5, workforce.getTauxHoraire());
             stmt.setDouble(6, workforce.getHeuresTravail());
             stmt.setDouble(7, workforce.getProductiviteOuvrier());
+            stmt.setInt(8 , workforce.getProject().getId());
+            stmt.setString(9, workforce.getTypeComposant());
+
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -133,7 +141,9 @@ public class WorkforceRepositoryImpl implements WorkforceRepository {
                         rs.getDouble("taux_tva"),
                         rs.getDouble("taux_horaire"),
                         rs.getDouble("heures_travail"),
-                        rs.getDouble("productivite_ouvrier")
+                        rs.getDouble("productivite_ouvrier"),
+                        new Project(
+                                rs.getInt("projet_id"))
                 );
                 workforces.add(workforce);
             }
@@ -141,5 +151,18 @@ public class WorkforceRepositoryImpl implements WorkforceRepository {
             e.printStackTrace();
         }
         return workforces;
+    }
+
+
+    @Override
+    public void updateTva(Workforce workforce) {
+        String sql = "UPDATE workforce SET taux_tva = ? WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setDouble(1, workforce.getTauxTVA());
+            stmt.setInt(2, workforce.getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

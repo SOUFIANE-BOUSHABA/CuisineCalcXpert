@@ -7,8 +7,8 @@ public class Workforce extends Component {
 
     public Workforce() {}
 
-    public Workforce(int id, String nom, double coutUnitaire, double quantite, double tauxTVA, double tauxHoraire, double heuresTravail, double productiviteOuvrier) {
-        super(id, nom, coutUnitaire, quantite, "Main-d'œuvre", tauxTVA);
+    public Workforce(int id, String nom, double coutUnitaire, double quantite, double tauxTVA, double tauxHoraire, double heuresTravail, double productiviteOuvrier , Project project) {
+        super(id, nom, coutUnitaire, quantite, "Workforce", tauxTVA , project);
         this.tauxHoraire = tauxHoraire;
         this.heuresTravail = heuresTravail;
         this.productiviteOuvrier = productiviteOuvrier;

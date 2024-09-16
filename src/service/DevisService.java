@@ -17,14 +17,12 @@ public class DevisService {
     }
 
 
-    public void createDevis(double montantEstime, LocalDate dateEmission, LocalDate dateValidite, boolean accepte, int projetId) {
-        Devis devis = new Devis(0, montantEstime, dateEmission, dateValidite, accepte, projetId);
+    public void createDevis(Devis devis) {
         devisRepository.save(devis);
     }
 
 
-    public void updateDevis(int id, double montantEstime, LocalDate dateEmission, LocalDate dateValidite, boolean accepte, int projetId) {
-        Devis devis = new Devis(id, montantEstime, dateEmission, dateValidite, accepte, projetId);
+    public void updateDevis(Devis devis) {
         devisRepository.update(devis);
     }
 
@@ -66,10 +64,5 @@ public class DevisService {
         }
     }
 
-    public void generateDevisForProject(int projectId, double estimatedCost, LocalDate dateValidite) {
 
-        LocalDate dateEmission = LocalDate.now();
-        boolean accepte = false;
-        createDevis(estimatedCost, dateEmission, dateValidite, accepte, projectId);
-    }
 }

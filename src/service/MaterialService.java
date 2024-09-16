@@ -49,6 +49,9 @@ public class MaterialService {
         return materiauxRepository.findByProjectId(projectId);
     }
 
+    public void updateTva(Material material) {
+        materiauxRepository.updateTva(material);
+    }
 
     public double calculateMaterialCost(int materialId) {
         Optional<Material> material = materiauxRepository.findById(materialId);
