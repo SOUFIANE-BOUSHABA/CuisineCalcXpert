@@ -16,24 +16,24 @@ public class ClientController {
     }
 
 
-    public void addClient() {
-        System.out.println("--- Ajout d'un nouveau client ---");
-        System.out.print("Nom: ");
-        String nom = scanner.nextLine();
-        System.out.print("Adresse: ");
-        String adresse = scanner.nextLine();
-        System.out.print("Téléphone: ");
-        String telephone = scanner.nextLine();
-        System.out.print("Est-ce un client professionnel (true/false)? ");
-        boolean estProfessionnel = scanner.nextBoolean();
-        System.out.print("Remise: ");
-        double remise = scanner.nextDouble();
-        scanner.nextLine(); // Consommer la ligne restante
-
-        Client client = new Client(0, nom, adresse, telephone, estProfessionnel, remise);
-        clientService.create(client);
-        System.out.println("Client ajouté avec succès!");
-    }
+//    public void addClient() {
+//        System.out.println("--- Ajout d'un nouveau client ---");
+//        System.out.print("Nom: ");
+//        String nom = scanner.nextLine();
+//        System.out.print("Adresse: ");
+//        String adresse = scanner.nextLine();
+//        System.out.print("Téléphone: ");
+//        String telephone = scanner.nextLine();
+//        System.out.print("Est-ce un client professionnel (true/false)? ");
+//        boolean estProfessionnel = scanner.nextBoolean();
+//        System.out.print("Remise: ");
+//        double remise = scanner.nextDouble();
+//        scanner.nextLine(); // Consommer la ligne restante
+//
+//        Client client = new Client(0, nom, adresse, telephone, estProfessionnel, remise);
+//        clientService.create(client);
+//        System.out.println("Client ajouté avec succès!");
+//    }
 
 
     public void findClient() {

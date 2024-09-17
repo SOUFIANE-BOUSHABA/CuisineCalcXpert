@@ -19,6 +19,7 @@ public class ProjectController {
     private  WorkforceService workforceService;
     private  MaterialService materialService;
     private final Scanner scanner;
+    private double surface;
 
     public ProjectController(ClientService clientService, ProjectService projectService , WorkforceService workforceService , MaterialService materialService) {
         this.clientService = clientService;
@@ -93,7 +94,7 @@ public class ProjectController {
         System.out.print("Entrez le nom du projet : ");
         String projectName = scanner.nextLine();
         System.out.print("Entrez la surface de la cuisine (en m²) : ");
-        double surface = scanner.nextDouble();
+        surface = scanner.nextDouble();
         scanner.nextLine();
 
         Project project = new Project();
@@ -170,7 +171,7 @@ public class ProjectController {
         System.out.print("Souhaitez-vous appliquer une TVA au projet ? (y/n) : ");
         boolean applyVAT = scanner.nextLine().equalsIgnoreCase("y");
 
-        final double vatRate ;
+        final double vatRate;
         if (applyVAT) {
             System.out.print("Entrez le pourcentage de TVA (%) : ");
             vatRate = scanner.nextDouble();
@@ -189,13 +190,10 @@ public class ProjectController {
             scanner.nextLine();
             project.setMargeBeneficiaire(marginRate);
             projectService.update(project);
-
         }
-
 
         List<Material> materials = materialService.getMaterialsByProjectId(project.getId());
         List<Workforce> workforces = workforceService.getWorkforcesByProjectId(project.getId());
-
 
         materials.forEach(material -> {
             material.setTauxTVA(vatRate);
@@ -207,8 +205,7 @@ public class ProjectController {
             workforceService.updateTva(workforce);
         });
 
-
-        double totalCost = projectService.calculateTotalCost(project.getId(), vatRate, marginRate);
+        double totalCost = projectService.calculateTotalCost(project.getId(), project.getClientId(), vatRate, marginRate);
 
         System.out.println("--- Résultat du Calcul ---");
 
@@ -216,19 +213,92 @@ public class ProjectController {
         System.out.println("Nom du projet : " + projectDetails.getNomProjet());
         System.out.println("Client : " + clientService.findById(projectDetails.getClientId()).get().getNom());
         System.out.println("Adresse du chantier : " + clientService.findById(projectDetails.getClientId()).get().getAdresse());
-        System.out.println("Surface : " + projectDetails.getCoutTotal() + " m²");
+        System.out.println("Surface : " + surface + " m²");
 
-        System.out.println("Coût total final du projet : " + totalCost + " €");
+        System.out.println("--- Détail des Coûts ---");
+
+        System.out.println("1. Matériaux :\n");
+        List<Material> materialls = materialService.getMaterialsByProjectId(project.getId());
+        double totalMaterialCostBeforeVAT = 0;
+        double totalMaterialCostWithVAT = 0;
+
+        for (Material material : materialls) {
+            double materialCost = materialService.calculateMaterialCost(material.getId());
+            totalMaterialCostBeforeVAT += materialCost;
+            double materialCostWithVAT = materialCost * (1 + material.getTauxTVA() / 100);
+            totalMaterialCostWithVAT += materialCostWithVAT;
+            System.out.printf("- %s : %.2f € (quantité : %.2f m², coût unitaire : %.2f €/m², qualité : %.1f, transport : %.2f €, TVA : %.2f%%)%n",
+                    material.getNom(),
+                    materialCostWithVAT,
+                    material.getQuantite(),
+                    material.getCoutUnitaire(),
+                    material.getCoefficientQualite(),
+                    material.getCoutTransport(),
+                    material.getTauxTVA());
+        }
+
+        System.out.printf("**Coût total des matériaux avant TVA : %.2f €**%n", totalMaterialCostBeforeVAT);
+        System.out.printf("**Coût total des matériaux avec TVA : %.2f €**%n", totalMaterialCostWithVAT);
+
+        System.out.println("2. Main-d'œuvre :\n");
+
+        List<Workforce> workforcces = workforceService.getWorkforcesByProjectId(project.getId());
+        double totalWorkforceCostBeforeVAT = 0;
+        double totalWorkforceCostWithVAT = 0;
+
+        for (Workforce workforce : workforcces) {
+            double workforceCost = workforceService.calculateWorkforceCost(workforce.getId());
+            totalWorkforceCostBeforeVAT += workforceCost;
+            double workforceCostWithVAT = workforceCost * (1 + workforce.getTauxTVA() / 100);
+            totalWorkforceCostWithVAT += workforceCostWithVAT;
+            System.out.printf("- %s : %.2f € (heures travaillées : %.2f, taux horaire : %.2f €/h, productivité : %.1f, TVA : %.2f%%)%n",
+                    workforce.getNom(),
+                    workforceCostWithVAT,
+                    workforce.getHeuresTravail(),
+                    workforce.getTauxHoraire(),
+                    workforce.getProductiviteOuvrier(),
+                    workforce.getTauxTVA());
+        }
+
+        System.out.printf("**Coût total de la main-d'œuvre avant TVA : %.2f €**%n", totalWorkforceCostBeforeVAT);
+        System.out.printf("**Coût total de la main-d'œuvre avec TVA : %.2f €**%n", totalWorkforceCostWithVAT);
+
+        System.out.println("3. Coût total avant marge : " + totalCost + " €");
+        System.out.println("4. Marge bénéficiaire : " + marginRate + "% : " + (totalCost * (marginRate / 100)) + " €");
+
+        System.out.println("Coût total final du projet : " + (totalCost + (totalCost * (marginRate / 100))) + " €");
 
         System.out.println("--- Enregistrement du Devis ---");
         System.out.print("Entrez la date d'émission du devis (format : jj/mm/aaaa) : ");
         String issueDate = scanner.nextLine();
         System.out.print("Entrez la date de validité du devis (format : jj/mm/aaaa) : ");
         String validityDate = scanner.nextLine();
-
+        System.out.println("Souhaitez-vous enregistrer le devis ? (y/n) :");
+        String choice = scanner.nextLine();
+        if (!choice.equalsIgnoreCase("y")) {
+            System.out.println("Opération annulée.");
+            return;
+        }
         projectService.saveQuote(project.getId(), issueDate, validityDate, totalCost);
 
         System.out.println("Devis enregistré avec succès !");
+    }
+
+
+    public void getProjectCostById() {
+        System.out.println("--- Calcul du coût total d'un projet ---");
+        System.out.print("Entrez l'ID du projet : ");
+        int projectId = scanner.nextInt();
+        scanner.nextLine();
+
+        Optional<Project> projectOpt = projectService.findById(projectId);
+        if (projectOpt.isPresent()){
+            Project project = projectOpt.get();
+            double totalCost = project.getCoutTotal();
+            System.out.println("Le coût total du projet est : " + totalCost);
+        } else {
+            System.out.println("Projet avec l'ID " + projectId + " non trouvé.");
+        }
     }
 
 

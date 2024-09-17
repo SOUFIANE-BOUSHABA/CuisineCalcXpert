@@ -25,7 +25,8 @@ public class Main {
             System.out.println("=== Menu Principal ===");
             System.out.println("1. Créer un nouveau projet");
             System.out.println("2. Afficher les projets existants");
-            System.out.println("3. Quitter");
+            System.out.println("3. Calculer le coût d'un projet");
+            System.out.println("4. Quitter");
             System.out.print("Choisissez une option : ");
 
             int choice = scanner.nextInt();
@@ -41,11 +42,14 @@ public class Main {
                     break;
 
                 case 3:
+                    projectController.getProjectCostById();
+                    break;
+
+                case 4:
                     System.out.println("Merci d'avoir utilisé l'application. À bientôt !");
                     scanner.close();
                     System.exit(0);
                     break;
-
                 default:
                     System.out.println("Option invalide. Veuillez réessayer.");
                     break;

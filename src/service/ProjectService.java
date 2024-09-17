@@ -90,15 +90,19 @@ public class ProjectService {
     }
 
 
-    public double calculateTotalCost(int projectId, double vatRate, double marginRate) {
+    public double calculateTotalCost(int projectId, int clientId, double vatRate, double marginRate) {
+        ClientService clientService = new ClientService();
+        double discountedCost = clientService.applyClientDiscount(clientId, projectId);
 
-        double totalCost = calculateTotalProjectCost(projectId);
+        if (discountedCost == -1) {
+            throw new IllegalArgumentException("Invalid client or project ID.");
+        }
 
+        double totalCost = discountedCost;
 
         if (vatRate > 0) {
             totalCost += totalCost * (vatRate / 100);
         }
-
 
         if (marginRate > 0) {
             totalCost += totalCost * (marginRate / 100);
@@ -152,5 +156,9 @@ public class ProjectService {
             throw new IllegalArgumentException("Project with ID " + projectId + " not found.");
         }
     }
+
+
+
+
 
 }
