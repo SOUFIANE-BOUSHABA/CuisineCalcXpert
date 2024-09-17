@@ -275,8 +275,11 @@ public class ProjectController {
         String validityDate = scanner.nextLine();
         System.out.println("Souhaitez-vous enregistrer le devis ? (y/n) :");
         String choice = scanner.nextLine();
+
         if (!choice.equalsIgnoreCase("y")) {
             System.out.println("Opération annulée.");
+            project.setEtatProjet(Project.EtatProjet.ANNULE);
+            projectService.update(project);
             return;
         }
         projectService.saveQuote(project.getId(), issueDate, validityDate, totalCost);
