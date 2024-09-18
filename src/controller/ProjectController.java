@@ -282,7 +282,7 @@ public class ProjectController {
             projectService.update(project);
             return;
         }
-        projectService.saveQuote(project.getId(), issueDate, validityDate, totalCost);
+        projectService.createDevis(project.getId(), issueDate, validityDate, totalCost);
 
         System.out.println("Devis enregistré avec succès !");
     }

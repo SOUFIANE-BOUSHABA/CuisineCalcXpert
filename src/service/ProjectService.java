@@ -56,11 +56,11 @@ public class ProjectService {
         List<Workforce> workforces = workforceRepository.findByProjectId(projectId);
 
         double totalMaterialCost = materials.stream()
-                .mapToDouble(material -> material.getCoutUnitaire() * material.getQuantite())
+                .mapToDouble(material -> material.getCoutUnitaire() * material.getQuantite() * material.getCoefficientQualite() + material.getCoutTransport() )
                 .sum();
 
         double totalWorkforceCost = workforces.stream()
-                .mapToDouble(workforce -> workforce.getCoutUnitaire() * workforce.getQuantite() * workforce.getHeuresTravail())
+                .mapToDouble(workforce -> workforce.getCoutUnitaire() * workforce.getQuantite() * workforce.getHeuresTravail() * workforce.getProductiviteOuvrier())
                 .sum();
 
         return totalMaterialCost + totalWorkforceCost;
@@ -121,7 +121,7 @@ public class ProjectService {
         }
     }
 
-    public void saveQuote(int projectId, String issueDate, String validityDate, double totalCost) {
+    public void createDevis(int projectId, String issueDate, String validityDate, double totalCost) {
         Optional<Project> projectOpt = projectRepository.findById(projectId);
         if (projectOpt.isPresent()) {
             Project project = projectOpt.get();
