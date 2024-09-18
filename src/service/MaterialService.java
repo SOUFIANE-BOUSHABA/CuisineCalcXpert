@@ -57,7 +57,7 @@ public class MaterialService {
         Optional<Material> material = materiauxRepository.findById(materialId);
         if (material.isPresent()) {
             Material mat = material.get();
-            return mat.getCoutUnitaire() * mat.getQuantite();
+            return mat.getCoutUnitaire() * mat.getQuantite() * mat.getCoefficientQualite() + mat.getCoutTransport();
         } else {
             System.out.println("Material not found with ID: " + materialId);
             return 0;
