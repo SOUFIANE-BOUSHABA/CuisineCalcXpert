@@ -32,8 +32,6 @@ public class WorkforceRepositoryImpl implements WorkforceRepository {
                 Workforce workforce = new Workforce(
                         rs.getInt("id"),
                         rs.getString("nom"),
-                        rs.getDouble("cout_unitaire"),
-                        rs.getDouble("quantite"),
                         rs.getDouble("taux_tva"),
                         rs.getDouble("taux_horaire"),
                         rs.getDouble("heures_travail"),
@@ -59,8 +57,6 @@ public class WorkforceRepositoryImpl implements WorkforceRepository {
                 Workforce workforce = new Workforce(
                         rs.getInt("id"),
                         rs.getString("nom"),
-                        rs.getDouble("cout_unitaire"),
-                        rs.getDouble("quantite"),
                         rs.getDouble("taux_tva"),
                         rs.getDouble("taux_horaire"),
                         rs.getDouble("heures_travail"),
@@ -78,17 +74,16 @@ public class WorkforceRepositoryImpl implements WorkforceRepository {
 
     @Override
     public void save(Workforce workforce) {
-        String sql = "INSERT INTO workforce (nom, cout_unitaire, quantite, taux_tva, taux_horaire, heures_travail, productivite_ouvrier , projet_id  , type_composant) VALUES (?, ?, ?, ?, ?, ?, ?,? , ?)";
+        String sql = "INSERT INTO workforce (nom,  taux_tva, taux_horaire, heures_travail, productivite_ouvrier , projet_id  , type_composant) VALUES (?, ?, ?, ?, ?,? , ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, workforce.getNom());
-            stmt.setDouble(2, workforce.getCoutUnitaire());
-            stmt.setDouble(3, workforce.getQuantite());
-            stmt.setDouble(4, workforce.getTauxTVA());
-            stmt.setDouble(5, workforce.getTauxHoraire());
-            stmt.setDouble(6, workforce.getHeuresTravail());
-            stmt.setDouble(7, workforce.getProductiviteOuvrier());
-            stmt.setInt(8 , workforce.getProject().getId());
-            stmt.setString(9, workforce.getTypeComposant());
+            stmt.setDouble(2, workforce.getTauxTVA());
+            stmt.setDouble(3, workforce.getTauxHoraire());
+            stmt.setDouble(4, workforce.getHeuresTravail());
+            stmt.setDouble(5, workforce.getProductiviteOuvrier());
+            stmt.setInt(6, workforce.getProject().getId());
+            stmt.setString(7, workforce.getTypeComposant());
+
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -98,16 +93,15 @@ public class WorkforceRepositoryImpl implements WorkforceRepository {
 
     @Override
     public void update(Workforce workforce) {
-        String sql = "UPDATE workforce SET nom = ?, cout_unitaire = ?, quantite = ?, taux_tva = ?, taux_horaire = ?, heures_travail = ?, productivite_ouvrier = ? WHERE id = ?";
+        String sql = "UPDATE workforce SET nom = ?, taux_tva = ?, taux_horaire = ?, heures_travail = ?, productivite_ouvrier = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, workforce.getNom());
-            stmt.setDouble(2, workforce.getCoutUnitaire());
-            stmt.setDouble(3, workforce.getQuantite());
-            stmt.setDouble(4, workforce.getTauxTVA());
-            stmt.setDouble(5, workforce.getTauxHoraire());
-            stmt.setDouble(6, workforce.getHeuresTravail());
-            stmt.setDouble(7, workforce.getProductiviteOuvrier());
-            stmt.setInt(8, workforce.getId());
+            stmt.setDouble(2, workforce.getTauxTVA());
+            stmt.setDouble(3, workforce.getTauxHoraire());
+            stmt.setDouble(4, workforce.getHeuresTravail());
+            stmt.setDouble(5, workforce.getProductiviteOuvrier());
+            stmt.setInt(6, workforce.getId());
+
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -136,8 +130,6 @@ public class WorkforceRepositoryImpl implements WorkforceRepository {
                 Workforce workforce = new Workforce(
                         rs.getInt("id"),
                         rs.getString("nom"),
-                        rs.getDouble("cout_unitaire"),
-                        rs.getDouble("quantite"),
                         rs.getDouble("taux_tva"),
                         rs.getDouble("taux_horaire"),
                         rs.getDouble("heures_travail"),

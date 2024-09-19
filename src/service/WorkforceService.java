@@ -58,7 +58,7 @@ public class WorkforceService {
         Optional<Workforce> workforce = workforceRepository.findById(workforceId);
         if (workforce.isPresent()) {
             Workforce wf = workforce.get();
-            return wf.getCoutUnitaire() * wf.getQuantite() * wf.getHeuresTravail() * wf.getProductiviteOuvrier();
+            return wf.getTauxHoraire() * wf.getHeuresTravail() * wf.getProductiviteOuvrier();
         } else {
             System.out.println("Workforce not found with ID: " + workforceId);
             return 0;

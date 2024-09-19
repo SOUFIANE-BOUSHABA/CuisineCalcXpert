@@ -154,7 +154,7 @@ public class ProjectController {
             double productivityFactor = scanner.nextDouble();
             scanner.nextLine();
 
-            Workforce workforce = new Workforce(0, laborType, hourlyRate, hoursWorked, 20, hourlyRate, hoursWorked, productivityFactor , project );
+            Workforce workforce = new Workforce(0, laborType, 20, hourlyRate, hoursWorked, productivityFactor , project );
 
             projectService.addWorkforceToProject(project.getId(), workforce);
 
