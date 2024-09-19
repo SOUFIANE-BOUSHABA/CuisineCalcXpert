@@ -7,8 +7,8 @@ public class Workforce extends Component {
 
     public Workforce() {}
 
-    public Workforce(int id, String nom, double coutUnitaire, double quantite, double tauxTVA, double tauxHoraire, double heuresTravail, double productiviteOuvrier , Project project) {
-        super(id, nom, coutUnitaire, quantite, "Workforce", tauxTVA , project);
+    public Workforce(int id, String nom, double tauxTVA, double tauxHoraire, double heuresTravail, double productiviteOuvrier, Project project) {
+        super(id, nom, "Workforce", tauxTVA, project);
         this.tauxHoraire = tauxHoraire;
         this.heuresTravail = heuresTravail;
         this.productiviteOuvrier = productiviteOuvrier;
@@ -23,7 +23,7 @@ public class Workforce extends Component {
 
     @Override
     public String toString() {
-        return "Labor{" +
+        return "Workforce{" +
                 "tauxHoraire=" + tauxHoraire +
                 ", heuresTravail=" + heuresTravail +
                 ", productiviteOuvrier=" + productiviteOuvrier +

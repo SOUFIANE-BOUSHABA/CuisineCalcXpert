@@ -60,7 +60,7 @@ public class ProjectService {
                 .sum();
 
         double totalWorkforceCost = workforces.stream()
-                .mapToDouble(workforce -> workforce.getCoutUnitaire() * workforce.getQuantite() * workforce.getHeuresTravail() * workforce.getProductiviteOuvrier())
+                .mapToDouble(workforce -> workforce.getTauxHoraire() * workforce.getHeuresTravail() * workforce.getProductiviteOuvrier())
                 .sum();
 
         return totalMaterialCost + totalWorkforceCost;
