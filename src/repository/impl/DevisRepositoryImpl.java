@@ -77,7 +77,6 @@ public class DevisRepositoryImpl implements DevisRepository {
             stmt.setBoolean(4, devis.isAccepte());
             stmt.setInt(5, devis.getProjetId());
             stmt.executeUpdate();
-            System.out.println("Devis inserted successfully!");
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error inserting Devis into database", e);
