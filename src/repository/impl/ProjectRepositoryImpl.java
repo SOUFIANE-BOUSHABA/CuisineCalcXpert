@@ -32,7 +32,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
             stmt.executeUpdate();
 
-            // Retrieve the generated keys
+
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     project.setId(generatedKeys.getInt(1));
