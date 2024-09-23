@@ -13,6 +13,7 @@ public class Main {
     public static final String YELLOW = "\u001B[33m";
     public static final String CYAN = "\u001B[36m";
     public static final String RED = "\u001B[31m";
+    private static final String ANSI_RESET = "\033[0m";
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -38,8 +39,19 @@ public class Main {
             System.out.println(CYAN + BOLD + "╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝");
             System.out.print(BOLD + "Choisissez une option : ");
 
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+
+            int choice =0 ;
+            do {
+                if(!scanner.hasNextInt()){
+                    System.out.println(RED + "Option invalide. Veuillez réessayer." +    ANSI_RESET);
+                    scanner.nextLine();
+                    continue;
+                }
+                else{
+                    choice= scanner.nextInt();
+                }
+            }while (choice==0);
+
 
             switch (choice) {
                 case 1:
