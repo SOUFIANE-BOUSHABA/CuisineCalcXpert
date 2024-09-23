@@ -251,7 +251,7 @@ public class ProjectController {
             double materialCostWithVAT = materialCost * (1 + material.getTauxTVA() / 100);
             totalMaterialCostWithVAT += materialCostWithVAT;
 
-            System.out.printf("| %-25s | %-15.2f |  %-12.2f |  %-13.2f |  %-12.2f |  %-10.2f |  %-10.2f € |%n",
+            System.out.printf("| %-25s | %-15.2f |  %-12.2f |  %-12.2f |  %-12.2f |  %-10.2f |  %-9.2f € |%n",
                     material.getNom(),
                     material.getCoutUnitaire(),
                     material.getQuantite(),
