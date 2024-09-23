@@ -14,6 +14,7 @@ import repository.impl.WorkforceRepositoryImpl;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class ProjectService {
@@ -45,8 +46,8 @@ public class ProjectService {
         return projectRepository.findById(id);
     }
 
-    public List<Project> findAll(){
-        return  projectRepository.findAll();
+    public Optional<List<Map<String, Object>>> getAllProjectsWithClients() {
+        return projectRepository.findAllWithClients();
     }
 
 

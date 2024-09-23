@@ -9,9 +9,7 @@ import service.MaterialService;
 import service.ProjectService;
 import service.WorkforceService;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class ProjectController {
     private final ClientService clientService;
@@ -307,6 +305,26 @@ public class ProjectController {
 
     public void displayAllProjects() {
         System.out.println("--- Liste des projets ---");
-        projectService.findAll().forEach(project -> System.out.println(project));
+        Optional<List<Map<String, Object>>> optionalProjects = projectService.getAllProjectsWithClients();
+
+        if (optionalProjects.isPresent()) {
+            List<Map<String, Object>> projects = optionalProjects.get();
+            Map<String, List<String>> clientProjectsMap = new HashMap<>();
+
+            for (Map<String, Object> project : projects) {
+                String clientName = (String) project.get("client_name");
+                String projectName = (String) project.get("project_name");
+                clientProjectsMap.computeIfAbsent(clientName, k -> new ArrayList<>()).add(projectName);
+            }
+
+            clientProjectsMap.forEach((client, projectList) -> {
+                System.out.println("Le client \"" + client + "\" a les projets :");
+                for (int i = 0; i < projectList.size(); i++) {
+                    System.out.println((i + 1) + " : " + projectList.get(i));
+                }
+            });
+        } else {
+            System.out.println("Aucun projet trouvé.");
+        }
     }
 }
