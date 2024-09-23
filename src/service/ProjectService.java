@@ -13,6 +13,7 @@ import repository.impl.WorkforceRepositoryImpl;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -122,30 +123,30 @@ public class ProjectService {
         }
     }
 
-    public void createDevis(int projectId, String issueDate, String validityDate, double totalCost) {
+
+
+
+    public void createDevis(int projectId, LocalDate issueDate, LocalDate validityDate, double totalCost) {
         Optional<Project> projectOpt = projectRepository.findById(projectId);
         if (projectOpt.isPresent()) {
             Project project = projectOpt.get();
 
-
-            LocalDate issueLocalDate = LocalDate.parse(issueDate, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            LocalDate validityLocalDate = LocalDate.parse(validityDate, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
             DevisService devisService = new DevisService();
             List<Devis> existingDevis = devisService.findDevisByProjectId(projectId);
             if (!existingDevis.isEmpty()) {
                 Devis devis = existingDevis.get(0);
                 devis.setMontantEstime(totalCost);
-                devis.setDateEmission(issueLocalDate);
-                devis.setDateValidite(validityLocalDate);
-                devis.setAccepte(false);
+                devis.setDateEmission(issueDate);
+                devis.setDateValidite(validityDate);
+                devis.setAccepte(true);
                 devisService.updateDevis(devis);
             } else {
                 Devis devis = new Devis(
                         0,
                         totalCost,
-                        issueLocalDate,
-                        validityLocalDate,
-                        false,
+                        issueDate,
+                        validityDate,
+                        true,
                         projectId
                 );
                 devisService.createDevis(devis);

@@ -9,6 +9,8 @@ import service.MaterialService;
 import service.ProjectService;
 import service.WorkforceService;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class ProjectController {
@@ -305,10 +307,41 @@ public class ProjectController {
 
 
         System.out.println(ANSI_BOLD_BLUE + "--- Enregistrement du Devis ---" + ANSI_RESET);
-        System.out.print(ANSI_BOLD_YELLOW + "Entrez la date d'émission du devis (format : jj/mm/aaaa) : " + ANSI_RESET);
-        String issueDate = scanner.nextLine();
-        System.out.print(ANSI_BOLD_YELLOW + "Entrez la date de validité du devis (format : jj/mm/aaaa) : " + ANSI_RESET);
-        String validityDate = scanner.nextLine();
+        System.out.print("Enter the quote issue date (format: dd/MM/yyyy) : ");
+        boolean valid = false;
+        LocalDate issueDate = null;
+        do {
+            try {
+                issueDate = LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                if (issueDate.isAfter(LocalDate.now())) {
+                    valid = true;
+                } else {
+                    System.out.println(ANSI_BOLD_RED + "The issue date must be in the future." + ANSI_RESET);
+                }
+            } catch (Exception e) {
+                System.out.println(ANSI_BOLD_RED + "Invalid date format" + ANSI_RESET);
+            }
+        } while (!valid);
+
+
+
+
+        System.out.print("Enter the quote validity date (format: dd/MM/yyyy) : ");
+        valid = false;
+        LocalDate validityDate = null;
+        do {
+            try {
+                validityDate = LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                if (validityDate.isAfter(issueDate)) {
+                    valid = true;
+                } else {
+                    System.out.println(ANSI_BOLD_RED + "The validity date must be after the issue date." + ANSI_RESET);
+                }
+            } catch (Exception e) {
+                System.out.println(ANSI_BOLD_RED + "Invalid date format" + ANSI_RESET);
+            }
+        } while (!valid);
+
         System.out.print(ANSI_BOLD_YELLOW + "Souhaitez-vous enregistrer le devis ? (y/n) :" + ANSI_RESET);
         String choice = scanner.nextLine();
 
