@@ -20,13 +20,20 @@ public class ClientRepositoryImpl implements ClientRepository {
     public void create(Client client) {
         try {
             String query = "INSERT INTO client (nom, adresse, telephone, estprofessionnel, remise) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement stmt = connection.prepareStatement(query);
+            PreparedStatement stmt = connection.prepareStatement(query , PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setString(1, client.getNom());
             stmt.setString(2, client.getAdresse());
             stmt.setString(3, client.getTelephone());
             stmt.setBoolean(4, client.isEstProfessionnel());
             stmt.setDouble(5, client.getRemise());
             stmt.executeUpdate();
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    client.setId(generatedKeys.getInt(1));
+                } else {
+                    throw new SQLException("Creating client failed, no ID obtained.");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
