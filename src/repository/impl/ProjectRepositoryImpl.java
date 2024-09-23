@@ -8,10 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class ProjectRepositoryImpl implements ProjectRepository {
 
@@ -97,27 +94,23 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
 
-    public List<Project> findAll() {
-
-        String sql = "SELECT * FROM project";
+    public Optional<List<Map<String, Object>>> findAllWithClients() {
+        String sql = "SELECT p.*, c.nom AS client_nom FROM project p JOIN client c ON p.client_id = c.id";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             var rs = stmt.executeQuery();
-            List<Project> projects = new ArrayList<>();
+            List<Map<String, Object>> projects = new ArrayList<>();
             while (rs.next()) {
-                projects.add(new Project(
-                        rs.getInt("id"),
-                        rs.getString("nom_projet"),
-                        rs.getDouble("marge_beneficiaire"),
-                        rs.getDouble("cout_total"),
-                        Project.EtatProjet.valueOf(rs.getString("etat_projet").toUpperCase()),
-                        rs.getInt("client_id")
-                ));
+                Map<String, Object> projectData = new HashMap<>();
+                projectData.put("project_id", rs.getInt("id"));
+                projectData.put("project_name", rs.getString("nom_projet"));
+                projectData.put("client_name", rs.getString("client_nom"));
+                projects.add(projectData);
             }
-            return projects;
+            return Optional.of(projects);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return Collections.emptyList();
+        return Optional.empty();
     }
 
 }
