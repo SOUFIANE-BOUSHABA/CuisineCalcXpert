@@ -5,9 +5,8 @@ import repository.ClientRepository;
 import utils.DatabaseConnection;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 public class ClientRepositoryImpl implements ClientRepository {
 
     private Connection connection;
@@ -134,6 +133,35 @@ public class ClientRepositoryImpl implements ClientRepository {
 
         }
         return Optional.empty();
+
+    }
+
+
+
+
+    public Map<Client, Integer> getClientWithCountProject(){
+        Map<Client , Integer> clientProjectCount = new HashMap<>();
+        String query = "SELECT client.id, client.nom, COUNT(project.id) as count FROM client LEFT JOIN project ON client.id = project.client_id GROUP BY client.id";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Client client = new Client(
+                        rs.getInt("id"),
+                        rs.getString("nom"),
+                        rs.getString("adresse"),
+                        rs.getString("telephone"),
+                        rs.getBoolean("estprofessionnel"),
+                        rs.getDouble("remise")
+                );
+                clientProjectCount.put(client, rs.getInt("count"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return clientProjectCount;
+
+
 
     }
 
