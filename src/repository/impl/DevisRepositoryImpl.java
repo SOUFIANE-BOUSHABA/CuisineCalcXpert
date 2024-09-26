@@ -1,5 +1,6 @@
 package repository.impl;
 
+import model.Client;
 import model.Devis;
 import repository.DevisRepository;
 import utils.DatabaseConnection;
@@ -8,9 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class DevisRepositoryImpl implements DevisRepository {
 
@@ -132,5 +131,42 @@ public class DevisRepositoryImpl implements DevisRepository {
             e.printStackTrace();
         }
         return devisList;
+    }
+
+
+
+    public Map<Client, List<String>> getClientWithDevis(int clientid) {
+
+        String sql= "SELECT * FROM devis d join project p on d.project_id = p.id join client c on c.id = p.client_id where c.id = ?";
+        Map<Client , List<Devis>> ClientWithDevis = new HashMap<>();
+        List<String>  devis = new ArrayList<>();
+        try(PreparedStatement stmt = connection.prepareStatement(sql)){
+            stmt.setInt(1 , clientid);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                Client client = new Client(
+                        rs.getInt("id"),
+                        rs.getString("nom"),
+                        rs.getString("adresse"),
+                        rs.getString("telephon"),
+                        rs.getBoolean("estprofessionnel"),
+                        rs.getDouble("remise")
+                );
+                Devis deviss = new Devis(
+                        rs.getInt("id"),
+                        rs.getDouble("montant_estime"),
+                        rs.getDate("date_emission").toLocalDate(),
+                        rs.getDate("date_validite").toLocalDate(),
+                        rs.getBoolean("accepte"),
+                        rs.getInt("projet_id")
+
+                );
+
+
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
     }
 }
