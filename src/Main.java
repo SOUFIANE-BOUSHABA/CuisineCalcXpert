@@ -5,6 +5,7 @@ import service.ProjectService;
 import controller.ClientController;
 import controller.ProjectController;
 import service.WorkforceService;
+import utils.DatabaseConnection;
 
 public class Main {
     public static final String BOLD = "\u001B[1m";
@@ -16,6 +17,19 @@ public class Main {
     private static final String ANSI_RESET = "\033[0m";
 
     public static void main(String[] args) {
+
+        DatabaseConnection dbConnection1 = DatabaseConnection.getInstance();
+        DatabaseConnection dbConnection2 = DatabaseConnection.getInstance();
+
+        if (dbConnection1 == dbConnection2) {
+            System.out.println("Singleton ");
+        } else {
+            System.out.println("not Singleton ");
+        }
+
+
+
+
         Scanner scanner = new Scanner(System.in);
 
         ClientService clientService = new ClientService();
